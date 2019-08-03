@@ -14,7 +14,9 @@ import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
+import com.gzdata.common.shiro.ShiroMd5Util;
 import com.gzdata.core.dto.UserDto;
 import com.gzdata.core.model.User;
 import com.gzdata.core.service.UserService;
@@ -38,20 +40,21 @@ public class JwtFilter extends AuthenticatingFilter {
         try {
             allowed = executeLogin(request, response);
         } catch(IllegalStateException e){ //not found any token
-        	logger.error("Not found any token");
+        	logger.info("Not found any token");
         }catch (Exception e) {
-        	logger.error("Error occurs when login", e);
+        	logger.info("Error occurs when login", e);
         }
         return allowed || super.isPermissive(mappedValue);
     }
     /**
      * 这里重写了父类的方法，使用我们自己定义的Token类，提交给shiro。这个方法返回null的话会直接抛出异常，进入isAccessAllowed（）的异常处理逻辑。
      */
-    protected AuthenticationToken createToken(HttpServletRequest servletRequest, ServletResponse servletResponse) {
-        String jwtToken = servletRequest.getHeader("token");
+    @Override
+    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) {
+        String jwtToken = ((HttpServletRequest) servletRequest).getHeader("token");
         
         User user = userService.findByUserName(JwtUtil.getUsername(jwtToken));
-        if(!StringUtils.hasText(jwtToken)&&!JwtUtil.verify(jwtToken, JwtUtil.getUsername(jwtToken), user.getPassword())){
+        if(StringUtils.hasText(jwtToken)&&!JwtUtil.verify(jwtToken, JwtUtil.getUsername(jwtToken), user.getPassword())){
             logger.info("token已过期");
         	return new JwtToken(JwtUtil.sign(user.getUserName(), user.getPassword()));
         }
@@ -66,7 +69,7 @@ public class JwtFilter extends AuthenticatingFilter {
         HttpServletResponse httpResponse = WebUtils.toHttp(servletResponse);
         httpResponse.setCharacterEncoding("UTF-8");
         httpResponse.setContentType("application/json;charset=UTF-8");
-//        httpResponse.setStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+        httpResponse.setStatus(203);
 //        fillCorsHeader(WebUtils.toHttp(servletRequest), httpResponse);
         return false;
     }
@@ -79,10 +82,10 @@ public class JwtFilter extends AuthenticatingFilter {
         String newToken = null;
         if(token instanceof JwtToken){
         	JwtToken jwtToken = (JwtToken)token;
-            UserDto user = (UserDto) subject.getPrincipal();
+            User user = (User) subject.getPrincipal();
             boolean shouldRefresh = JwtUtil.verify(jwtToken.getPrincipal().toString(), user.getUserName(), user.getPassword());
-            if(shouldRefresh) {
-                newToken = JwtUtil.sign(user.getUserName(), user.getPassword());
+            if(!shouldRefresh) {
+                newToken = JwtUtil.sign(user.getUserName(), ShiroMd5Util.MD5Pwd(user.getUserName(), user.getPassword()));
             }
         }
         if(StringUtils.hasText(newToken))
@@ -98,10 +101,5 @@ public class JwtFilter extends AuthenticatingFilter {
         logger.info("Validate token fail, token:{}, error:{}", token.toString(), e.getMessage());
         return false;
     }
-	@Override
-	protected AuthenticationToken createToken(ServletRequest request,
-			ServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

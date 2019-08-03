@@ -30,7 +30,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry ){
-        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**").excludePathPatterns("/rpc","/webjars","/swagger-ui.html","/login", "/register", "/static");
+        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**").excludePathPatterns("/druid","/rpc","/webjars","/swagger-ui.html","/login", "/register", "/static");
     }
  
 }

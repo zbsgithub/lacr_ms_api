@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,9 +32,9 @@ import com.gzdata.core.service.UserService;
  *
  * @since 2019年07月17日
  */
+@CrossOrigin
 @RestController
 @Api(description="用户管理-控制器")
-@ApiModel()
 public class UserDataController {
 
 	@Autowired

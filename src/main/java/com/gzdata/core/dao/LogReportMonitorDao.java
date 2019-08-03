@@ -1,7 +1,7 @@
 
                                                             
 
-package com.gzdata.core.dao.master;
+package com.gzdata.core.dao;
 
 import java.io.Serializable;
 import java.util.List;

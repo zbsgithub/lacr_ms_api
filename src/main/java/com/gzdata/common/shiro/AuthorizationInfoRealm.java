@@ -7,6 +7,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +28,20 @@ import java.util.Set;
  */
 public class AuthorizationInfoRealm extends AuthorizingRealm {
 	
+	private Logger logger = LoggerFactory.getLogger(AuthorizationInfoRealm.class);
+	
 	@Autowired
 	private UserService userService;
 
+	
+	 /**
+     *  找它的原因是这个方法返回true
+     */ 
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof UsernamePasswordToken;
+    }
+    
 	/**
 	 * 权限认证
 	 */
@@ -49,23 +62,23 @@ public class AuthorizationInfoRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-    	System.out.println("-------身份认证方法--------");
         
     	String userName = (String) authenticationToken.getPrincipal();
         String userPwd = new String((char[]) authenticationToken.getCredentials());
+        logger.info("-----------身份认证--通过----token解析："+ShiroMd5Util.MD5Pwd(userName,userPwd));
         
-        System.out.println("token解析的："+ShiroMd5Util.MD5Pwd(userName,userPwd));
+        User user = userService.findByUserName(userName);//查询用户是否存在
         
-        User user = userService.findByUserName(userName);
-        if (userName == null) {
+        if (userName == null || userName.length() <= 0) {
             throw new AccountException("用户名不正确");
-        } else if (!ShiroMd5Util.MD5Pwd(userName,userPwd).equals(user.getPassword())) {
+        } else if (!userPwd.equals(userPwd)) {
             throw new AccountException("密码不正确");
         }
        
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(userName, user.getPassword(),
                 ByteSource.Util.bytes(userName + "salt"), getName());
+
     }
     
 }

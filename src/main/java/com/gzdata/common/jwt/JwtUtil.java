@@ -58,16 +58,15 @@ public class JwtUtil {
     public static String getUsername(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("username").asString();
+            String userName = jwt.getClaim("username").asString();
+            return userName;
         } catch (JWTDecodeException e) {
-        	logger.info("----------JWTDecodeException---------");
-//        	e.printStackTrace();
-            return "";
+        	throw new RuntimeException("----------JWTDecodeException---------");
         }
     }
 
     /**
-     * 生成签名,2min后过期
+     * 生成签名,30min后过期
      *
      * @param username 用户名
      * @param secret   用户的密码
@@ -83,4 +82,5 @@ public class JwtUtil {
 		        .withExpiresAt(date)
 		        .sign(algorithm);
     }
+    
 }

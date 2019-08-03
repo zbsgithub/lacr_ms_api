@@ -3,13 +3,14 @@ package com.gzdata.common.shiro;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.SessionStorageEvaluator;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.mgt.DefaultWebSessionStorageEvaluator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/front/**", "anon");
         filterChainDefinitionMap.put("/api/**", "anon");
         
+        //druid monitor
+        filterChainDefinitionMap.put("/druid/**", "anon");
+        
         //rpc api 接口权限开放
         filterChainDefinitionMap.put("/rpc/**", "anon");
         
@@ -50,7 +54,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/admin/**", "authc");
         filterChainDefinitionMap.put("/user/**", "authc");
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
-//        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
 
@@ -105,7 +109,7 @@ public class ShiroConfig {
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         // 散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
         
         // 散列的次数，比如散列两次，相当于 md5(md5(""));
         hashedCredentialsMatcher.setHashIterations(2);
@@ -114,5 +118,16 @@ public class ShiroConfig {
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         return hashedCredentialsMatcher;
     }
+    
+    /**
+     * 禁用session, 不保存用户登录状态。保证每次请求都重新认证。
+     * 需要注意的是，如果用户代码里调用Subject.getSession()还是可以用session，如果要完全禁用，要配合下面的noSessionCreation的Filter来实现
+     */
+     @Bean
+     protected SessionStorageEvaluator sessionStorageEvaluator(){
+         DefaultWebSessionStorageEvaluator sessionStorageEvaluator = new DefaultWebSessionStorageEvaluator();
+         sessionStorageEvaluator.setSessionStorageEnabled(false);
+         return sessionStorageEvaluator;
+     }
     
 }

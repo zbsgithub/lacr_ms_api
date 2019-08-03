@@ -11,17 +11,17 @@ import org.springframework.context.annotation.Configuration;
  * @author liuzh
  * @since 2015-12-19 14:46
  */
-//@Configuration
-////TODO 注意，由于MapperScannerConfigurer执行的比较早，所以必须有下面的注解
-//@AutoConfigureAfter(MyBatisConfig.class)
-//public class MyBatisMapperScannerConfig {
-//
-//    @Bean
-//    public MapperScannerConfigurer mapperScannerConfigurer() {
-//        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-//        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-//        mapperScannerConfigurer.setBasePackage("com.gzdata.core.dao");
-//        return mapperScannerConfigurer;
-//    }
-//
-//}
+@Configuration
+//TODO 注意，由于MapperScannerConfigurer执行的比较早，所以必须有下面的注解
+@AutoConfigureAfter(MyBatisConfig.class)
+public class MyBatisMapperScannerConfig {
+
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+        mapperScannerConfigurer.setBasePackage("com.gzdata.core.dao");
+        return mapperScannerConfigurer;
+    }
+
+}

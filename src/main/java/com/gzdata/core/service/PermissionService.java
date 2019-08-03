@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.gzdata.common.db.mybatis.dao.BaseDAOInterface;
 import com.gzdata.common.db.mybatis.service.AbstractBaseService;
-import com.gzdata.core.dao.master.PermissionDao;
+import com.gzdata.core.dao.PermissionDao;
 import com.gzdata.core.model.Permission;
 
 /**

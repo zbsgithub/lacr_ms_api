@@ -1,7 +1,7 @@
 
                     
 
-package com.gzdata.core.dao.master;
+package com.gzdata.core.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.apache.ibatis.type.JdbcType;
 
 import com.gzdata.common.db.mybatis.dao.BaseDAOInterface;
 import com.gzdata.common.db.mybatis.query.QueryInterface;
-import com.gzdata.core.model.Role;
+import com.gzdata.core.model.Permission;
 
 /**
  * 
@@ -29,7 +29,7 @@ import com.gzdata.core.model.Role;
  * 
  * @since 2019年07月23日
  */
-public interface RoleDao extends BaseDAOInterface<Role> {
+public interface PermissionDao extends BaseDAOInterface<Permission> {
 
 	 	
 	/**
@@ -44,10 +44,10 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Insert({ "insert into role ( id,role_name)  values (#{id,jdbcType=INTEGER},#{roleName,jdbcType=VARCHAR})" })
+	@Insert({ "insert into permission ( id,permission_name)  values (#{id,jdbcType=INTEGER},#{permissionName,jdbcType=VARCHAR})" })
 	@Override
 	 	@Options(useGeneratedKeys = true, keyProperty = "id")
-		public void insert(Role entity);
+		public void insert(Permission entity);
 
 	/**
 	 * 
@@ -63,14 +63,14 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Insert({
 			"<script>"
-			+"insert into role "
-		    +"<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\" > <if test=\"id != null\" > id, </if> <if test=\"roleName != null\" > role_name, </if>  </trim> "
-		    +" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\" >  <if test=\"id != null\" > #{id,jdbcType=INTEGER}, </if> <if test=\"roleName != null\" > #{roleName,jdbcType=VARCHAR}, </if> </trim>"
+			+"insert into permission "
+		    +"<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\" > <if test=\"id != null\" > id, </if> <if test=\"permissionName != null\" > permission_name, </if>  </trim> "
+		    +" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\" >  <if test=\"id != null\" > #{id,jdbcType=INTEGER}, </if> <if test=\"permissionName != null\" > #{permissionName,jdbcType=VARCHAR}, </if> </trim>"
 		    +"</script>" 
 			})
 	@Override
 	 	@Options(useGeneratedKeys = true, keyProperty = "id")
-		public void insertSelective(Role entity);
+		public void insertSelective(Permission entity);
 	
 	
 
@@ -86,7 +86,7 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Delete({ "delete from role where id = #{id,jdbcType=INTEGER}" })
+	@Delete({ "delete from permission where id = #{id,jdbcType=INTEGER}" })
 	@Override
 	public void deleteByID(Serializable id);
 
@@ -104,7 +104,7 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Delete({
 			"<script>"
-			+"delete from role where id in "
+			+"delete from permission where id in "
 			+"<foreach  item=\"id\"  collection=\"array\" open=\"(\" separator=\",\" close=\")\" > #{id} </foreach>"
 			+"</script>" 
 			})
@@ -123,9 +123,9 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Update({ "update role set id= #{id,jdbcType=INTEGER},role_name= #{roleName,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER} " })
+	@Update({ "update permission set id= #{id,jdbcType=INTEGER},permission_name= #{permissionName,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER} " })
 	@Override
-	public void update(Role entity);
+	public void update(Permission entity);
 	
 	
 
@@ -143,13 +143,13 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Update({
 			"<script>"
-			+"update role "
-			+"<set > <if test=\"id != null\" > id = #{id,jdbcType=INTEGER}, </if> <if test=\"roleName != null\" > role_name = #{roleName,jdbcType=VARCHAR}, </if>  </set> "
+			+"update permission "
+			+"<set > <if test=\"id != null\" > id = #{id,jdbcType=INTEGER}, </if> <if test=\"permissionName != null\" > permission_name = #{permissionName,jdbcType=VARCHAR}, </if>  </set> "
 			+"where id = #{id,jdbcType=INTEGER}"
 			+"</script>" 
 			})
 	@Override
-	public void updateSelective(Role entity);
+	public void updateSelective(Permission entity);
 
 	
 	/**
@@ -164,10 +164,10 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Select({ "select * from role" })
-	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "role_name", property = "roleName" , jdbcType = JdbcType.VARCHAR ) })
+	@Select({ "select * from permission" })
+	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "permission_name", property = "permissionName" , jdbcType = JdbcType.VARCHAR ) })
 	@Override
-	public List<Role> findAll();
+	public List<Permission> findAll();
 
 	/**
 	 * 
@@ -181,7 +181,7 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Select({ "select count(id) from role" })
+	@Select({ "select count(id) from permission" })
 	@Override
 	public int findTotalCount();
 
@@ -197,10 +197,10 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 * 
 	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
-	@Select({ "select * from role where id = #{id,jdbcType=INTEGER}" })
-	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "role_name", property = "roleName" , jdbcType = JdbcType.VARCHAR ) })
+	@Select({ "select * from permission where id = #{id,jdbcType=INTEGER}" })
+	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "permission_name", property = "permissionName" , jdbcType = JdbcType.VARCHAR ) })
 	@Override
-	public Role findById(Serializable id);
+	public Permission findById(Serializable id);
 
 	/**
 	 * 
@@ -216,14 +216,14 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Select({
 			"<script>"
-			+"select * from role "
+			+"select * from permission "
 			+"<where> 1 = 1 "
-			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"roleName != null\" > and role_name = #{roleName,jdbcType=VARCHAR} </if> "
+			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"permissionName != null\" > and permission_name = #{permissionName,jdbcType=VARCHAR} </if> "
 			+"</where> order by id </script>" 
 			})
-	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "role_name", property = "roleName" , jdbcType = JdbcType.VARCHAR ) })
+	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "permission_name", property = "permissionName" , jdbcType = JdbcType.VARCHAR ) })
 	@Override
-	public List<Role> findList(QueryInterface query);
+	public List<Permission> findList(QueryInterface query);
 
 	/**
 	 * 
@@ -239,9 +239,9 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Select({
 			"<script>"
-			+"select count(id) from role "
+			+"select count(id) from permission "
 			+"<where> 1 = 1 "
-			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"roleName != null\" > and role_name = #{roleName,jdbcType=VARCHAR} </if> "
+			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"permissionName != null\" > and permission_name = #{permissionName,jdbcType=VARCHAR} </if> "
 			+"</where></script>" 
 			})
 	@Override
@@ -261,16 +261,16 @@ public interface RoleDao extends BaseDAOInterface<Role> {
 	 */
 	@Select({
 			"<script>"
-			+"select * from role "
+			+"select * from permission "
 			+"<where> 1 = 1 "
-			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"roleName != null\" > and role_name = #{roleName,jdbcType=VARCHAR} </if> "
+			+"<if test=\"id != null\" > and id = #{id,jdbcType=INTEGER} </if><if test=\"permissionName != null\" > and permission_name = #{permissionName,jdbcType=VARCHAR} </if> "
 			+"</where> order by id "
 			+"<if test=\"pagination==1\" > limit #{first,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>"
 			+"</script>" 
 			})
-	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "role_name", property = "roleName" , jdbcType = JdbcType.VARCHAR ) })
+	@Results({@Result(column = "id", property = "id" , jdbcType = JdbcType.INTEGER ,id = true  ),@Result(column = "permission_name", property = "permissionName" , jdbcType = JdbcType.VARCHAR ) })
 	@Override
-	public List<Role> findPaginationDataByCondition(QueryInterface query);
+	public List<Permission> findPaginationDataByCondition(QueryInterface query);
 
 }
 

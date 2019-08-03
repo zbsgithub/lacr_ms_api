@@ -1,4 +1,4 @@
-/*
+
 package com.gzdata.config;
 
 import javax.sql.DataSource;  
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;  
   
 import com.alibaba.druid.pool.DruidDataSource;  
-*//**
+/**
  * 数据源配置
  * 
  *
@@ -16,7 +16,7 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @version 
  *
  * @since 2017年5月31日
- *//*
+ */
 @Configuration  
 public class DruidDataSourceConfiguration {  
   
@@ -26,4 +26,4 @@ public class DruidDataSourceConfiguration {
         DruidDataSource druidDataSource = new DruidDataSource();  
         return druidDataSource;  
     }  
-}  */
+}  

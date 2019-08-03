@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import com.gzdata.core.model.StdChannels;
 import com.gzdata.core.qo.StdChannelsQo;
 import com.gzdata.core.service.StdChannelsService;
 
+@CrossOrigin
 @RestController
 @Api(description="远程调用接口-控制器")
 public class RpcApiController {

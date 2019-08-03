@@ -39,7 +39,7 @@ import com.trilead.ssh2.Connection;
  * @since 2019年7月24日
  */
 @Component
-@EnableScheduling
+//@EnableScheduling
 public class SaticScheduleTask {
 
 	

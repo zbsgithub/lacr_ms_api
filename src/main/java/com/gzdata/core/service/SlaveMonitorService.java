@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.gzdata.common.db.mybatis.dao.BaseDAOInterface;
 import com.gzdata.common.db.mybatis.service.AbstractBaseService;
-import com.gzdata.core.dao.master.SlaveMonitorDao;
+import com.gzdata.core.dao.SlaveMonitorDao;
 import com.gzdata.core.model.SlaveMonitor;
 
 /**

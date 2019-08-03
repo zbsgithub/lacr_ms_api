@@ -1,7 +1,5 @@
 package com.gzdata.common.exception;
 
-import java.util.Map;
-
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -10,9 +8,14 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.gzdata.common.db.mybatis.result.Result;
@@ -41,7 +44,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseBody
 	public Result doHandleRuntimeException(RuntimeException e) {
-		
+
 		return Result.valueOf(Result.ERROR, e.getMessage());
 	}
 
@@ -83,13 +86,30 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
-	 * 捕捉404异常
 	 * 
+	 * 功能描述：处理非法访问相关异常
+	 *
+	 * @param e
 	 * @return
+	 * 
+	 * @author 张兵帅
+	 *
+	 * @since 2019年7月23日
+	 *
+	 * @update:[变更日期YYYY-MM-DD][更改人姓名][变更描述]
 	 */
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseBody
-	@ExceptionHandler(NoHandlerFoundException.class)
-	public Result handle404(NoHandlerFoundException e) {
-		return Result.valueOf(Result.ERROR, "404异常处理");
+	public Result doHandleNotSupportedException(
+			HttpRequestMethodNotSupportedException e) {
+
+		String msg = "";
+
+		if (e instanceof HttpRequestMethodNotSupportedException) {
+			msg = "token不正确，请检查token有效性";
+		}
+
+		return Result.valueOf(Result.ERROR, msg);
+
 	}
 }
